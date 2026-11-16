@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>मेरा शहडोल जिला</title>
+<title>AI Science Quiz Generator</title>
 
 <style>
 * {
@@ -15,164 +15,349 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #f1f8e9;
-    color: #222;
+    background: linear-gradient(135deg,#101c40,#235b82);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
-header {
-    background: #176b38;
-    color: white;
-    text-align: center;
+.container {
+    background: white;
+    width: 100%;
+    max-width: 650px;
     padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px #0005;
 }
 
-nav {
-    background: #104d29;
-    padding: 15px;
+h1 {
     text-align: center;
+    color: #174c83;
+    margin-bottom: 10px;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    margin: 12px;
-    font-weight: bold;
-}
-
-.hero {
+.subtitle {
     text-align: center;
-    padding: 40px 15px;
-    background: #dcedc8;
+    color: #666;
+    margin-bottom: 25px;
 }
 
-.hero img {
-    width: 90%;
-    max-width: 700px;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 15px;
-}
-
-section {
-    padding: 30px 20px;
-    text-align: center;
-}
-
-h2 {
-    color: #176b38;
+.progress {
+    height: 10px;
+    background: #ddd;
+    border-radius: 10px;
     margin-bottom: 20px;
 }
 
-.cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-
-.card {
-    background: white;
-    width: 280px;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px #aaa;
-}
-
-.card img {
-    width: 100%;
-    height: 170px;
-    object-fit: cover;
+#progressBar {
+    height: 10px;
+    width: 0%;
+    background: #1685e8;
     border-radius: 10px;
 }
 
-.card h3 {
-    color: #176b38;
-    margin: 12px;
+#question {
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #222;
 }
 
-footer {
-    background: #104d29;
-    color: white;
-    text-align: center;
-    padding: 20px;
+.option {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+    background: #f7faff;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 16px;
 }
+
+.option:hover {
+    background: #e1efff;
+}
+
+.option.selected {
+    background: #d2e8ff;
+    border-color: #1685e8;
+}
+
+.option:disabled {
+    cursor: not-allowed;
+}
+
+button {
+    padding: 13px 25px;
+    border: none;
+    border-radius: 10px;
+    background: #176ac1;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    background: #104d91;
+}
+
+#nextBtn {
+    display: none;
+    width: 100%;
+}
+
+#result {
+    display: none;
+    text-align: center;
+}
+
+#result h2 {
+    color: #176ac1;
+    margin: 20px;
+}
+
+#score {
+    font-size: 30px;
+    color: green;
+    margin: 20px;
+}
+
+#feedback {
+    margin: 15px 0;
+    font-weight: bold;
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>🌳 मेरा शहडोल जिला 🌳</h1>
-<p>मध्य प्रदेश का सुंदर जिला</p>
-</header>
+<div class="container">
 
-<nav>
-<a href="#home">होम</a>
-<a href="#about">परिचय</a>
-<a href="#tourism">पर्यटन</a>
-<a href="#agriculture">कृषि</a>
-</nav>
+<h1>🧪 AI Science Quiz</h1>
+<p class="subtitle">विज्ञान के 10 मजेदार प्रश्नों का टेस्ट</p>
 
-<div class="hero" id="home">
-<h2>शहडोल में आपका स्वागत है</h2>
-<img src="https://images.unsplash.com/photo-1448375240586-882707db888b"
-alt="प्राकृतिक जंगल">
-<p>प्राकृतिक सुंदरता और सांस्कृतिक विरासत से भरपूर शहडोल।</p>
+<div id="quiz">
+
+<div class="progress">
+<div id="progressBar"></div>
 </div>
 
-<section id="about">
-<h2>शहडोल जिले का परिचय</h2>
-<p>
-शहडोल मध्य प्रदेश का एक जिला है।
-यह अपनी प्राकृतिक सुंदरता, जंगलों,
-खनिज संपदा और सांस्कृतिक विरासत के लिए जाना जाता है।
-</p>
-</section>
+<p id="questionNumber">प्रश्न 1 / 10</p>
 
-<section id="tourism">
-<h2>प्रमुख पर्यटन स्थल</h2>
+<div id="question"></div>
 
-<div class="cards">
+<div id="options"></div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1511497584788-876760111969">
-<h3>प्राकृतिक वन</h3>
-<p>शहडोल क्षेत्र में सुंदर जंगल और प्राकृतिक दृश्य देखने को मिलते हैं।</p>
+<p id="feedback"></p>
+
+<button id="nextBtn" onclick="nextQuestion()">
+अगला प्रश्न ➜
+</button>
+
 </div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
-<h3>प्राकृतिक दृश्य</h3>
-<p>यहाँ का वातावरण और हरियाली पर्यटकों को आकर्षित करती है।</p>
+<div id="result">
+<h2>🎉 आपका रिजल्ट</h2>
+<p id="score"></p>
+<p id="message"></p>
+<button onclick="restartQuiz()">दोबारा टेस्ट दें</button>
 </div>
 
 </div>
-</section>
 
-<section id="agriculture">
-<h2>शहडोल की कृषि</h2>
+<script>
 
-<div class="cards">
+const questions = [
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef">
-<h3>खेती</h3>
-<p>क्षेत्र में धान, गेहूँ और अन्य फसलों की खेती की जाती है।</p>
-</div>
+{
+q: "सूर्य के सबसे निकट कौन सा ग्रह है?",
+a: ["पृथ्वी", "बुध", "मंगल", "शुक्र"],
+correct: 1
+},
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399">
-<h3>किसान</h3>
-<p>किसान जिले की अर्थव्यवस्था में महत्वपूर्ण योगदान देते हैं।</p>
-</div>
+{
+q: "पानी का रासायनिक सूत्र क्या है?",
+a: ["CO2", "O2", "H2O", "NaCl"],
+correct: 2
+},
 
-</div>
-</section>
+{
+q: "मनुष्य के शरीर में कितने हृदय होते हैं?",
+a: ["एक", "दो", "तीन", "चार"],
+correct: 0
+},
 
-<footer>
-<p>© 2026 मेरा शहडोल जिला प्रोजेक्ट</p>
-<p>धन्यवाद 🙏</p>
-</footer>
+{
+q: "पौधे अपना भोजन किस प्रक्रिया से बनाते हैं?",
+a: ["श्वसन", "प्रकाश संश्लेषण", "पाचन", "वाष्पीकरण"],
+correct: 1
+},
+
+{
+q: "लाल ग्रह किसे कहा जाता है?",
+a: ["शुक्र", "बृहस्पति", "मंगल", "शनि"],
+correct: 2
+},
+
+{
+q: "हवा में सबसे अधिक कौन सी गैस होती है?",
+a: ["ऑक्सीजन", "नाइट्रोजन", "कार्बन डाइऑक्साइड", "हाइड्रोजन"],
+correct: 1
+},
+
+{
+q: "मानव शरीर की सबसे बड़ी हड्डी कौन सी है?",
+a: ["फीमर", "टिबिया", "ह्यूमरस", "रेडियस"],
+correct: 0
+},
+
+{
+q: "पृथ्वी का प्राकृतिक उपग्रह कौन है?",
+a: ["सूर्य", "मंगल", "चंद्रमा", "शुक्र"],
+correct: 2
+},
+
+{
+q: "बिजली के बल्ब का फिलामेंट सामान्यतः किस धातु का बना होता है?",
+a: ["तांबा", "लोहा", "टंगस्टन", "एल्युमिनियम"],
+correct: 2
+},
+
+{
+q: "ध्वनि किस माध्यम में यात्रा नहीं कर सकती?",
+a: ["हवा", "पानी", "ठोस", "निर्वात"],
+correct: 3
+}
+
+];
+
+let current = 0;
+let score = 0;
+let selected = false;
+
+function loadQuestion() {
+
+    selected = false;
+
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("nextBtn").style.display = "none";
+
+    let q = questions[current];
+
+    document.getElementById("questionNumber").innerText =
+    "प्रश्न " + (current + 1) + " / " + questions.length;
+
+    document.getElementById("progressBar").style.width =
+    (current / questions.length * 100) + "%";
+
+    document.getElementById("question").innerText = q.q;
+
+    let optionsHTML = "";
+
+    q.a.forEach((option, index) => {
+        optionsHTML += `
+        <button class="option" onclick="checkAnswer(${index}, this)">
+        ${String.fromCharCode(65 + index)}. ${option}
+        </button>`;
+    });
+
+    document.getElementById("options").innerHTML = optionsHTML;
+}
+
+function checkAnswer(index, button) {
+
+    if (selected) return;
+
+    selected = true;
+
+    let q = questions[current];
+    let buttons = document.querySelectorAll(".option");
+
+    buttons.forEach((btn, i) => {
+        btn.disabled = true;
+
+        if (i === q.correct) {
+            btn.style.background = "#b8f5c4";
+            btn.style.borderColor = "green";
+        }
+    });
+
+    if (index === q.correct) {
+        score++;
+        document.getElementById("feedback").innerText =
+        "✅ बहुत अच्छा! आपका जवाब सही है।";
+        document.getElementById("feedback").style.color = "green";
+    } else {
+        document.getElementById("feedback").innerText =
+        "❌ गलत जवाब! हरे रंग में सही उत्तर दिखाया गया है।";
+        document.getElementById("feedback").style.color = "red";
+    }
+
+    document.getElementById("nextBtn").style.display = "block";
+
+    if (current === questions.length - 1) {
+        document.getElementById("nextBtn").innerText = "रिजल्ट देखें";
+    }
+}
+
+function nextQuestion() {
+
+    current++;
+
+    if (current < questions.length) {
+        loadQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("result").style.display = "block";
+
+    document.getElementById("progressBar").style.width = "100%";
+
+    document.getElementById("score").innerText =
+    score + " / " + questions.length;
+
+    let percentage = score * 10;
+
+    let message = "";
+
+    if (percentage >= 80) {
+        message = "🏆 शानदार! आप विज्ञान में बहुत अच्छे हैं।";
+    } else if (percentage >= 50) {
+        message = "👍 अच्छा प्रयास! और अभ्यास करें।";
+    } else {
+        message = "📚 और पढ़ाई करें, आप बेहतर कर सकते हैं।";
+    }
+
+    document.getElementById("message").innerText = message;
+}
+
+function restartQuiz() {
+
+    current = 0;
+    score = 0;
+
+    document.getElementById("result").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+
+    document.getElementById("nextBtn").innerText = "अगला प्रश्न ➜";
+
+    loadQuestion();
+}
+
+loadQuestion();
+
+</script>
 
 </body>
 </html>
