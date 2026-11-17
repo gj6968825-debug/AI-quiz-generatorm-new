@@ -24,12 +24,12 @@ body {
 }
 
 .container {
-    background: rgba(255,255,255,0.97);
+    background: #ffffff;
     width: 100%;
     max-width: 650px;
     padding: 30px;
     border-radius: 25px;
-    box-shadow: 0 15px 40px #00143d80;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
     animation: appear 0.8s ease;
 }
 
@@ -80,19 +80,21 @@ h1 {
     line-height: 1.5;
 }
 
+/* OPTIONS COLOR FIXED */
 .option {
     display: block;
     width: 100%;
     padding: 15px;
     margin: 12px 0;
-    border: 2px solid #bfdbfe;
-    background: blue;
+    border: 2px solid #93c5fd;
+    background: #eff6ff;
     border-radius: 12px;
     cursor: pointer;
     text-align: left;
     font-size: 16px;
-    transition: 0.3s;
+    font-weight: bold;
     color: #1e3a8a;
+    transition: 0.3s;
 }
 
 .option:hover:not(:disabled) {
@@ -103,6 +105,7 @@ h1 {
 
 .option:disabled {
     cursor: not-allowed;
+    opacity: 1;
 }
 
 button.main {
@@ -128,6 +131,7 @@ button.main:hover {
 #feedback {
     font-weight: bold;
     margin-top: 15px;
+    line-height: 1.5;
 }
 
 #result {
@@ -148,6 +152,28 @@ button.main:hover {
     margin: 20px;
 }
 
+#message {
+    color: #334155;
+    font-size: 17px;
+}
+
+@media(max-width: 500px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+    #question {
+        font-size: 18px;
+    }
+
+    .option {
+        padding: 13px;
+    }
+}
 </style>
 </head>
 
@@ -160,31 +186,31 @@ button.main:hover {
 
 <div id="quiz">
 
-<div class="progress">
-<div id="progressBar"></div>
-</div>
+    <div class="progress">
+        <div id="progressBar"></div>
+    </div>
 
-<p id="questionNumber"></p>
-<div id="question"></div>
-<div id="options"></div>
-<p id="feedback"></p>
+    <p id="questionNumber"></p>
+    <div id="question"></div>
+    <div id="options"></div>
+    <p id="feedback"></p>
 
-<button class="main" id="nextBtn"
-onclick="nextQuestion()" style="display:none">
-Next Question ➜
-</button>
+    <button class="main" id="nextBtn"
+    onclick="nextQuestion()" style="display:none">
+        Next Question ➜
+    </button>
 
 </div>
 
 <div id="result">
-<h2>🎉 Quiz Completed!</h2>
-<p>Your Score</p>
-<div id="score"></div>
-<p id="message"></p>
+    <h2>🎉 Quiz Completed!</h2>
+    <p>Your Score</p>
+    <div id="score"></div>
+    <p id="message"></p>
 
-<button class="main" onclick="restartQuiz()">
-🔄 Play Again
-</button>
+    <button class="main" onclick="restartQuiz()">
+        🔄 Play Again
+    </button>
 </div>
 
 </div>
@@ -250,113 +276,115 @@ let selected = false;
 
 function loadQuestion() {
 
-selected = false;
+    selected = false;
 
-document.getElementById("feedback").innerText = "";
-document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("nextBtn").style.display = "none";
 
-let q = questions[current];
+    let q = questions[current];
 
-document.getElementById("questionNumber").innerText =
-"Question " + (current+1) + " / 10";
+    document.getElementById("questionNumber").innerText =
+    "Question " + (current+1) + " / " + questions.length;
 
-document.getElementById("progressBar").style.width =
-(current/questions.length*100) + "%";
+    document.getElementById("progressBar").style.width =
+    (current/questions.length*100) + "%";
 
-document.getElementById("question").innerText = q.q;
+    document.getElementById("question").innerText = q.q;
 
-let html = "";
+    let html = "";
 
-q.a.forEach((option,index)=>{
-html += `<button class="option"
-onclick="checkAnswer(${index})">
-${String.fromCharCode(65+index)}. ${option}
-</button>`;
-});
+    q.a.forEach((option,index)=>{
+        html += `<button class="option"
+        onclick="checkAnswer(${index})">
+        ${String.fromCharCode(65+index)}. ${option}
+        </button>`;
+    });
 
-document.getElementById("options").innerHTML = html;
+    document.getElementById("options").innerHTML = html;
 }
 
 function checkAnswer(index) {
 
-if(selected) return;
+    if(selected) return;
 
-selected = true;
+    selected = true;
 
-let q = questions[current];
-let buttons = document.querySelectorAll(".option");
+    let q = questions[current];
+    let buttons = document.querySelectorAll(".option");
 
-buttons.forEach((btn,i)=>{
-btn.disabled = true;
+    buttons.forEach((btn,i)=>{
+        btn.disabled = true;
 
-if(i === q.correct){
-btn.style.background = "#bbf7d0";
-btn.style.borderColor = "#16a34a";
-btn.style.color = "#14532d";
-}
-});
+        if(i === q.correct) {
+            btn.style.background = "#bbf7d0";
+            btn.style.borderColor = "#16a34a";
+            btn.style.color = "#14532d";
+        } else if(i === index) {
+            btn.style.background = "#fee2e2";
+            btn.style.borderColor = "#dc2626";
+            btn.style.color = "#991b1b";
+        }
+    });
 
-if(index === q.correct){
-score++;
-document.getElementById("feedback").innerText =
-"🎉 Excellent! आपका जवाब सही है!";
-document.getElementById("feedback").style.color = "green";
-}
-else{
-document.getElementById("feedback").innerText =
-"❌ गलत जवाब! हरे रंग में सही उत्तर देखें।";
-document.getElementById("feedback").style.color = "red";
-}
+    if(index === q.correct) {
+        score++;
+        document.getElementById("feedback").innerText =
+        "🎉 Excellent! आपका जवाब सही है!";
+        document.getElementById("feedback").style.color = "green";
+    }
+    else {
+        document.getElementById("feedback").innerText =
+        "❌ गलत जवाब! हरे रंग में सही उत्तर देखें।";
+        document.getElementById("feedback").style.color = "red";
+    }
 
-document.getElementById("nextBtn").style.display = "block";
+    document.getElementById("nextBtn").style.display = "block";
 
-if(current === questions.length-1){
-document.getElementById("nextBtn").innerText = "🏆 Show Result";
-}
-}
-
-function nextQuestion(){
-
-current++;
-
-if(current < questions.length){
-document.getElementById("nextBtn").innerText = "Next Question ➜";
-loadQuestion();
-}
-else{
-showResult();
-}
+    if(current === questions.length-1) {
+        document.getElementById("nextBtn").innerText = "🏆 Show Result";
+    }
 }
 
-function showResult(){
+function nextQuestion() {
 
-document.getElementById("quiz").style.display = "none";
-document.getElementById("result").style.display = "block";
+    current++;
 
-document.getElementById("progressBar").style.width = "100%";
-
-document.getElementById("score").innerText =
-score + " / 10";
-
-let percent = score*10;
-
-document.getElementById("message").innerText =
-percent >= 80 ? "🏆 Amazing! You are a Science Champion!" :
-percent >= 50 ? "👍 Good Job! Keep Practicing!" :
-"📚 Keep Learning! You Can Do Better!";
+    if(current < questions.length) {
+        document.getElementById("nextBtn").innerText = "Next Question ➜";
+        loadQuestion();
+    }
+    else {
+        showResult();
+    }
 }
 
-function restartQuiz(){
+function showResult() {
 
-current = 0;
-score = 0;
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("result").style.display = "block";
 
-document.getElementById("result").style.display = "none";
-document.getElementById("quiz").style.display = "block";
+    document.getElementById("score").innerText =
+    score + " / " + questions.length;
 
-document.getElementById("nextBtn").innerText = "Next Question ➜";
+    let percent = (score/questions.length)*100;
 
-loadQuestion();
+    document.getElementById("message").innerText =
+    percent >= 80 ? "🏆 Amazing! You are a Science Champion!" :
+    percent >= 50 ? "👍 Good Job! Keep Practicing!" :
+    "📚 Keep Learning! You Can Do Better!";
+}
+
+function restartQuiz() {
+
+    current = 0;
+    score = 0;
+
+    document.getElementById("result").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+
+    document.getElementById("nextBtn").innerText = "Next Question ➜";
+
+    loadQuestion();
 }
 
 loadQuestion();
